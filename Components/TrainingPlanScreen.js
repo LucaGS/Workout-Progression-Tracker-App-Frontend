@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { NgrokBackendUrlTunnel } from '../constants';
 import LogoutButton from './LogoutButton';
+
 const TrainingPlanScreen = ({ route, navigation }) => {
     const { userId, trainingPlanId, trainingPlanName } = route.params;
     const [exercises, setExercises] = useState([]);
@@ -99,6 +100,45 @@ const TrainingPlanScreen = ({ route, navigation }) => {
         );
     };
 
+    // Function to handle navigation to WorkoutScreen without exerciseId
+    const navigateToWorkoutScreen = async () => {
+        try {
+            // Make the API call to add started training
+            const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserWorkout/AddStartedTraining`, {
+                method: 'POST', // Assuming the endpoint expects a POST request
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    trainingPlanId: trainingPlanId,
+                    userId: userId,
+                }),
+            });
+    
+            // Check if the response is ok (status code in the range 200-299)
+            if (!response.ok) {
+                throw new Error('Failed to start training');
+            }
+    
+            // Parse the response data
+            const data = await response.json();
+    
+            // Assuming the API returns startedTrainingId
+            const startedTrainingId = data.startedTrainingId;
+    
+            // Navigate to WorkoutScreen with the necessary parameters
+            navigation.navigate('WorkoutScreen', {
+                userId: userId,
+                trainingPlanId: trainingPlanId,
+                startedTrainingId: startedTrainingId, // Add startedTrainingId as a parameter
+            });
+        } catch (error) {
+            console.error('Error starting training:', error);
+            // Handle error (e.g., show an alert or message to the user)
+        }
+    };
+    
+
     const renderItem = ({ item }) => (
         <View style={styles.exerciseItem}>
             <Text style={styles.exerciseName}>{item.excercisename}</Text>
@@ -119,7 +159,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
-            <LogoutButton></LogoutButton>
+            <LogoutButton />
             <Text style={styles.header}>Welcome to your {trainingPlanName} Plan</Text>
             {exercises.length === 0 && !error ? ( // Check if there are no exercises and no error
                 <Text>No exercises added yet. You can add new exercises below.</Text>
@@ -142,9 +182,17 @@ const TrainingPlanScreen = ({ route, navigation }) => {
                 placeholder="Number of Sets"
                 value={newExerciseSets}
                 onChangeText={setNewExerciseSets}
-                keyboardType="numeric" // Assuming sets are numeric
+                keyboardType="numeric"
             />
             <Button title="Add Exercise" onPress={handleAddExercise} />
+
+            {/* Button to start the workout */}
+            <TouchableOpacity
+                style={styles.startWorkoutButton}
+                onPress={navigateToWorkoutScreen}
+            >
+                <Text style={styles.buttonText}>Start Workout</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -194,6 +242,18 @@ const styles = StyleSheet.create({
     buttonContainer: {
         marginLeft: 10, // Space between text and button
         width: 70, // Adjust width for button
+    },
+    startWorkoutButton: {
+        marginTop: 20,
+        paddingVertical: 10,
+        backgroundColor: '#1E90FF',
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     errorText: {
         color: 'red',
