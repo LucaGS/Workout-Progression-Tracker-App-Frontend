@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NgrokBackendUrlTunnel } from '../constants';
+import LogoutButton from './LogoutButton';
 const TrainingPlanViewScreen = ({ route, navigation }) => {
     const { userId: routeUserId } = route.params; 
     const [userId, setUserId] = useState(routeUserId || null);
@@ -140,6 +141,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <LogoutButton></LogoutButton>
             <FlatList
                 data={trainingPlans}
                 keyExtractor={(item) => item.trainingPlanId.toString()}

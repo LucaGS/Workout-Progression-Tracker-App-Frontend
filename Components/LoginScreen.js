@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
-import NgrokBackendUrlTunnel from '../constants'
+import { NgrokBackendUrlTunnel } from '../constants';
 const LoginScreen = ({ navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +28,7 @@ const LoginScreen = ({ navigation}) => {
              
               navigation.reset({
                 index: 0,
-                routes: [{ name: 'DefaultScreenAfterOpening' }],
+                routes: [{ name: 'TrainingPlanViewScreen' }],
               });
             })
             .catch((error) => {

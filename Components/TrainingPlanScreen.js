@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { NgrokBackendUrlTunnel } from '../constants';
+import LogoutButton from './LogoutButton';
 const TrainingPlanScreen = ({ route, navigation }) => {
     const { userId, trainingPlanId, trainingPlanName } = route.params;
     const [exercises, setExercises] = useState([]);
@@ -118,6 +119,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
+            <LogoutButton></LogoutButton>
             <Text style={styles.header}>Welcome to your {trainingPlanName} Plan</Text>
             {exercises.length === 0 && !error ? ( // Check if there are no exercises and no error
                 <Text>No exercises added yet. You can add new exercises below.</Text>

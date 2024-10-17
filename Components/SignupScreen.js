@@ -41,7 +41,10 @@ const SignupScreen = ({ navigation }) => {
             AsyncStorage.setItem('userId', data.userId.toString())
               .then(() => {
                 console.log('User ID saved to AsyncStorage:', data.userId);
-                navigation.navigate('DefaultScreenAfterOpening');
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: 'TrainingPlanViewScreen' }],
+                });
               })
               .catch((error) => {
                 console.error('Error saving user ID to AsyncStorage:', error);

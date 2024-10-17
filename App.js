@@ -4,9 +4,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './Components/LoginScreen';
 import SignupScreen from './Components/SignupScreen';
 import WelcomeScreen from './Components/WelcomeScreen';
-import DefaultScreenAfterOpening from './Components/DefaultScreenAfterOpening';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View,Text } from 'react-native';
+import TrainingPlanScreen from './Components/TrainingPlanScreen';
+import TrainingPlanViewScreen from './Components/TrainingPlanViewScreen';
 
 
 
@@ -20,7 +21,7 @@ const App = () => {
       const userId = await AsyncStorage.getItem('userId');
       if (userId) {
         setGlobalUserId(userId);
-        setInitialRoute('DefaultScreenAfterOpening');
+        setInitialRoute('TrainingPlanViewScreen');
       }
       setLoading(false); // Set loading to false after check
     };
@@ -39,7 +40,13 @@ const App = () => {
         <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name="DefaultScreenAfterOpening" component={DefaultScreenAfterOpening} initialParams={{userId:GlobalUserId}} />
+        <Stack.Screen name='TrainingPlanScreen' component={TrainingPlanScreen}></Stack.Screen>
+        <Stack.Screen 
+                    name="TrainingPlanViewScreen" 
+                    component={TrainingPlanViewScreen} 
+                    options={{ headerShown: true }} 
+                    initialParams={{ GlobalUserId }} // Pass userId directly
+                />
       </Stack.Navigator>
     </NavigationContainer>
   );
