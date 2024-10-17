@@ -1,0 +1,1 @@
+export const NgrokBackendUrlTunnel = "https://738c-2a02-908-1b0-f4a0-404f-a4ea-30f7-237f.ngrok-free.app"
