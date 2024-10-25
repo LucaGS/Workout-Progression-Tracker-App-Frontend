@@ -8,8 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { View, Text } from 'react-native';
 import TrainingPlanScreen from './Components/TrainingPlanScreen';
 import TrainingPlanViewScreen from './Components/TrainingPlanViewScreen';
-import WorkoutScreen from './Components/WorkoutScreen'; // Import the WorkoutScreen
-
+import WorkoutScreen from './Components/WorkoutScreen';
+import PastWorkoutScreen from './Components/PastWorkoutScreen'; // Import the PastWorkoutScreen
+import PastExcercisesScreen from './Components/PastExcerciseScreen';
 const App = () => {
   const Stack = createStackNavigator();
   const [initialRoute, setInitialRoute] = useState('Welcome');
@@ -36,21 +37,47 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Signup" component={SignupScreen} />
-        <Stack.Screen name='TrainingPlanScreen' component={TrainingPlanScreen} />
+        <Stack.Screen 
+          name="Welcome" 
+          component={WelcomeScreen} 
+          options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+          name="Login" 
+          component={LoginScreen} 
+          options={{ title: 'Login' }} 
+        />
+        <Stack.Screen 
+          name="Signup" 
+          component={SignupScreen} 
+          options={{ title: 'Signup' }} 
+        />
+        <Stack.Screen 
+          name="TrainingPlanScreen" 
+          component={TrainingPlanScreen} 
+          options={{ title: 'Training Plan' }} 
+        />
         <Stack.Screen 
           name="TrainingPlanViewScreen" 
           component={TrainingPlanViewScreen} 
-          options={{ headerShown: true }} 
+          options={{ title: 'Your Training Plans' }} 
           initialParams={{ GlobalUserId }} 
         />
         <Stack.Screen 
           name="WorkoutScreen" 
-          component={WorkoutScreen} // Add WorkoutScreen to the stack
-          options={{ headerShown: true }} 
+          component={WorkoutScreen} 
+          options={{ title: 'Workout' }} 
         />
+        <Stack.Screen 
+          name="PastWorkoutScreen" 
+          component={PastWorkoutScreen} // Add the PastWorkoutScreen
+          options={{ title: 'Past Workouts' }} // Set header title for PastWorkoutScreen
+        />
+        <Stack.Screen
+        name='PastExcercisesScreen'
+        component={PastExcercisesScreen}>
+        
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
