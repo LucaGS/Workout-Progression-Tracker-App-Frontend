@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NgrokBackendUrlTunnel } from '../constants';
-import 'react-native-gesture-handler'; // Add this import
-const LoginScreen = ({ navigation}) => {
+import 'react-native-gesture-handler'; 
+
+const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false); 
+
   const handleLogin = () => {
     console.log('Username:', username);
     console.log('Password:', password);
-    fetch(`${NgrokBackendUrlTunnel}/api/AppUser/login`, { // Ensure this URL is correct
+    fetch(`${NgrokBackendUrlTunnel}/api/AppUser/login`, { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +29,6 @@ const LoginScreen = ({ navigation}) => {
           AsyncStorage.setItem('userId', data.userId.toString())
             .then(() => {
               console.log('User ID saved to AsyncStorage:', data.userId);
-             
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'TrainingPlanViewScreen' }],
@@ -36,18 +38,19 @@ const LoginScreen = ({ navigation}) => {
               console.error('Error saving user ID to AsyncStorage:', error);
             });
         } else {
+          setLoginError(true); 
           console.log('No user ID returned from login.');
         }
       })
       .catch((error) => {
         console.error('Error:', error);
+        setLoginError(true); 
       });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Anmelden</Text>
-
       <TextInput
         style={styles.input}
         placeholder="Benutzername"
@@ -67,6 +70,12 @@ const LoginScreen = ({ navigation}) => {
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Anmelden</Text>
       </TouchableOpacity>
+
+      {loginError && ( 
+        <Text style={styles.errorText}>
+          Ungültiger Benutzername oder Passwort.
+        </Text>
+      )}
 
       <TouchableOpacity
         style={styles.linkContainer}
@@ -105,7 +114,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#007bff',
     paddingVertical: 15,
-    paddingHorizontal: 100,
+    paddingHorizontal: 100, 
     borderRadius: 8,
     marginTop: 20,
   },
@@ -120,6 +129,10 @@ const styles = StyleSheet.create({
   link: {
     color: '#007bff',
     fontSize: 16,
+  },
+  errorText: { 
+    color: 'red',
+    marginTop: 10,
   },
 });
 
