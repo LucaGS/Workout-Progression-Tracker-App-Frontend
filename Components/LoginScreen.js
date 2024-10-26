@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
 import { NgrokBackendUrlTunnel } from '../constants';
+import 'react-native-gesture-handler'; // Add this import
 const LoginScreen = ({ navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');

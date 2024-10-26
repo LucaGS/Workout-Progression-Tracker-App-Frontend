@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-
+import 'react-native-gesture-handler'; // Add this import
 const LogoutButton = () => {
   const navigation = useNavigation();
 

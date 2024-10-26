@@ -11,6 +11,8 @@ import TrainingPlanViewScreen from './Components/TrainingPlanViewScreen';
 import WorkoutScreen from './Components/WorkoutScreen';
 import PastWorkoutScreen from './Components/PastWorkoutScreen'; // Import the PastWorkoutScreen
 import PastExcercisesScreen from './Components/PastExcerciseScreen';
+import 'react-native-gesture-handler'; // Add this import
+
 const App = () => {
   const Stack = createStackNavigator();
   const [initialRoute, setInitialRoute] = useState('Welcome');

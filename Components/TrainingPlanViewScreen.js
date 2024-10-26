@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Button, 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NgrokBackendUrlTunnel } from '../constants';
 import LogoutButton from './LogoutButton';
-
+import 'react-native-gesture-handler'; // Add this import
 const TrainingPlanViewScreen = ({ route, navigation }) => {
     const { userId: routeUserId } = route.params; 
     const [userId, setUserId] = useState(routeUserId || null);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-
+import 'react-native-gesture-handler'; // Add this import
 const WelcomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>

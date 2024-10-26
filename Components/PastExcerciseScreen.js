@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { NgrokBackendUrlTunnel } from '../constants'; 
-
+import 'react-native-gesture-handler'; // Add this import
 const PastExcercisesScreen = ({ route }) => {
   const { userId, excerciseid, excercisename } = route.params;
   const [pastExercises, setPastExercises] = useState([]);

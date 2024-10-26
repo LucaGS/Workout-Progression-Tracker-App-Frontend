@@ -11,16 +11,18 @@
     "preview": {
       "distribution": "internal"
     },
+    "debug": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
     "production": {
       "autoIncrement": true,
       "android": {
-        "buildType": "apk"  
+        "buildType": "apk"
       }
     }
   },
   "submit": {
-    "production": {
-      
-    }
+    "production": {}
   }
 }

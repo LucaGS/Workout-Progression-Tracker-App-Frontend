@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import { NgrokBackendUrlTunnel } from '../constants'; // Ensure you have Ngrok URL configured
 import { Checkbox } from 'react-native-paper';
-
+import 'react-native-gesture-handler'; // Add this import
 const ExerciseItem = ({ item, userId, trainingPlanId, startedTrainingId}) => {
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');

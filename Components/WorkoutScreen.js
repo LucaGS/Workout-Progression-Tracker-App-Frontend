@@ -3,7 +3,7 @@ import { View, Text, FlatList, StyleSheet } from 'react-native';
 import LogoutButton from './LogoutButton';
 import ExerciseItem from './ExerciseItem';
 import { NgrokBackendUrlTunnel } from '../constants'; // Ensure you have Ngrok URL configured
-
+import 'react-native-gesture-handler'; // Add this import
 const WorkoutScreen = ({ route }) => {
   const { userId, trainingPlanId, startedTrainingId } = route.params;
   const [exercises, setExercises] = useState([]);
@@ -61,7 +61,6 @@ const WorkoutScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <LogoutButton />
       <Text style={styles.header}>Workout for Training Plan ID: {trainingPlanId}</Text>
       <Text>Your training ID for this workout is {startedTrainingId}</Text>
       <FlatList
