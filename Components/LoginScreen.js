@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NgrokBackendUrlTunnel } from '../constants';
+import { backendUrl } from '../constants';
 import 'react-native-gesture-handler'; 
 
 const LoginScreen = ({ navigation }) => {
-  const [username, setUsername] = useState('');
+  const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState(false); 
 
   const handleLogin = () => {
-    console.log('Username:', username);
+    console.log('Username:', mail);
     console.log('Password:', password);
-    fetch(`${NgrokBackendUrlTunnel}/api/AppUser/login`, { 
+    fetch(`${backendUrl}/api/users/login`, { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: username,
+        mail: mail,
         password: password,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.userId) {
+        if (data.id) {
           console.log('Success:', data);
-          AsyncStorage.setItem('userId', data.userId.toString())
+          AsyncStorage.setItem('userId', data.id.toString())
             .then(() => {
-              console.log('User ID saved to AsyncStorage:', data.userId);
+              console.log('User ID saved to AsyncStorage:', data.id);
               navigation.reset({
                 index: 0,
                 routes: [{ name: 'TrainingPlanViewScreen' }],
@@ -44,6 +44,7 @@ const LoginScreen = ({ navigation }) => {
       })
       .catch((error) => {
         console.error('Error:', error);
+        console.log(data);
         setLoginError(true); 
       });
   };
@@ -53,9 +54,9 @@ const LoginScreen = ({ navigation }) => {
       <Text style={styles.title}>Anmelden</Text>
       <TextInput
         style={styles.input}
-        placeholder="Benutzername"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="E-Mail"
+        value={mail}
+        onChangeText={setMail}
         autoCapitalize="none"
       />
 

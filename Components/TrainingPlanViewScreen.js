@@ -15,7 +15,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         const fetchUserId = async () => {
-            if (!userId) {
+            if (!routeUserId) { // Überprüfe nur, ob routeUserId gesetzt ist
                 try {
                     const storedUserId = await AsyncStorage.getItem('userId');
                     if (storedUserId) {
@@ -28,9 +28,10 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
                 }
             }
         };
-
+    
         fetchUserId();
-    }, [userId]);
+    }, [routeUserId]); // Trigger nur bei Änderung von routeUserId
+    
 
     const fetchTrainingPlans = async () => {
         if (!userId) return;
@@ -84,6 +85,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
                 setShowInput(false);
             } else {
                 const errorText = await response.text();
+                console.log(response);
                 Alert.alert('Error', 'Failed to add training plan: ' + errorText);
             }
         } catch (error) {
@@ -135,6 +137,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
     if (error) {
         return (
             <View style={styles.container}>
+                <LogoutButton />
                 <Text style={styles.errorText}>{error}</Text>
             </View>
         );

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage
-import { NgrokBackendUrlTunnel } from '../constants';
+import { backendUrl } from '../constants';
 import 'react-native-gesture-handler'; // Add this import
 const SignupScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
+  const [mail, setMail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [userId, setUserId] = useState('');
@@ -14,19 +15,20 @@ const SignupScreen = ({ navigation }) => {
     if (password === confirmPassword) {
       console.log('Username:', username);
       console.log('Password:', password);
-      fetch(`${NgrokBackendUrlTunnel}/api/AppUser/signup`, {
+      fetch(`${backendUrl}/api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: username,
+          name: username,
+          mail:mail,
           password: password,
         }),
       })
         .then((response) => {
           if (response.status === 409) {
-            // User already exists
+            console.log(response);
             setUserExists(true);
             return;
           }
@@ -35,13 +37,13 @@ const SignupScreen = ({ navigation }) => {
         .then((data) => {
           if (data) {
             console.log('Success:', data);
-            setUserId(data.userId); // Set the userId state
-            console.log('User ID:', data.userId); // Log userId directly from data
+            setUserId(data.id); // Set the userId state
+            console.log('User ID:', data.id); // Log userId directly from data
             
             // Store userId in AsyncStorage
-            AsyncStorage.setItem('userId', data.userId.toString())
+            AsyncStorage.setItem('userId', data.id.toString())
               .then(() => {
-                console.log('User ID saved to AsyncStorage:', data.userId);
+                console.log('User ID saved to AsyncStorage:', data.id);
                 navigation.reset({
                   index: 0,
                   routes: [{ name: 'TrainingPlanViewScreen' }],
@@ -74,6 +76,13 @@ const SignupScreen = ({ navigation }) => {
         placeholder="Benutzername"
         value={username}
         onChangeText={setUsername}
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="E-mail"
+        value={mail}
+        onChangeText={setMail}
         autoCapitalize="none"
       />
       <TextInput
