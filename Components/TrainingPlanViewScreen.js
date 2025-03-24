@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NgrokBackendUrlTunnel } from '../constants';
+import { backendUrl } from '../constants';
 import LogoutButton from './LogoutButton';
 import 'react-native-gesture-handler'; // Add this import
 const TrainingPlanViewScreen = ({ route, navigation }) => {
@@ -37,7 +37,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
         if (!userId) return;
         setLoading(true);
         try {
-            const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserTrainingPlan/${userId}`);
+            const response = await fetch(`${backendUrl}/api/trainingplan/user/${userId}`);
             if (response.ok) {
                 const data = await response.json();
                 setTrainingPlans(data);
@@ -71,7 +71,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserTrainingPlan`, {
+            const response = await fetch(`${backendUrl}/api/UserTrainingPlan`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
                     text: 'Delete',
                     onPress: async () => {
                         try {
-                            const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserTrainingPlan/${userId}/${trainingPlanId}`, {
+                            const response = await fetch(`${backendUrl}/api/UserTrainingPlan/${userId}/${trainingPlanId}`, {
                                 method: 'DELETE',
                             });
 

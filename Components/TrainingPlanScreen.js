@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { NgrokBackendUrlTunnel } from '../constants';
+import { backendUrl } from '../constants';
 import { StyleSheet } from 'react-native';
 import 'react-native-gesture-handler'; // Add this import
 const TrainingPlanScreen = ({ route, navigation }) => {
@@ -18,7 +18,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
   const fetchExercises = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserExcercise/${userId}/${trainingPlanId}`);
+      const response = await fetch(`${backendUrl}/api/UserExcercise/${userId}/${trainingPlanId}`);
       if (response.ok) {
         const data = await response.json();
         setExercises(data);
@@ -44,7 +44,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
     }
 
     try {
-      const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserExcercise`, {
+      const response = await fetch(`${backendUrl}/api/UserExcercise`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
           text: 'Delete',
           onPress: async () => {
             try {
-              const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserExcercise/${userId}/${exerciseId}/${trainingPlanId}`, {
+              const response = await fetch(`${backendUrl}/api/UserExcercise/${userId}/${exerciseId}/${trainingPlanId}`, {
                 method: 'DELETE',
               });
 
@@ -106,7 +106,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
 
   const navigateToWorkoutScreen = async () => {
     try {
-      const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserWorkout/AddStartedTraining`, {
+      const response = await fetch(`${backendUrl}/api/UserWorkout/AddStartedTraining`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
