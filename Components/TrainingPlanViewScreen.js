@@ -13,7 +13,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
     const [newPlanName, setNewPlanName] = useState('');
     const [showInput, setShowInput] = useState(false);
 
-    useEffect(() => {
+    useEffect(() => {   
         const fetchUserId = async () => {
             if (!routeUserId) { // Überprüfe nur, ob routeUserId gesetzt ist
                 try {
@@ -41,6 +41,7 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
             if (response.ok) {
                 const data = await response.json();
                 setTrainingPlans(data);
+                console.log(data.id)
             } else {
                 const errorText = await response.text();
                 setError('Error fetching training plans: ' + errorText);
@@ -58,8 +59,8 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
 
     const handleTrainingPlanPress = (trainingPlan) => {
         navigation.navigate('TrainingPlanScreen', {
-            trainingPlanId: trainingPlan.trainingPlanId,
-            trainingPlanName: trainingPlan.trainingPlanName,
+            trainingplanid: trainingPlan.id,
+            trainingplanname: trainingPlan.name,
             userId: userId,
         });
     };
@@ -71,12 +72,12 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
         }
 
         try {
-            const response = await fetch(`${backendUrl}/api/UserTrainingPlan`, {
+            const response = await fetch(`${backendUrl}/api/trainingplan/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ userId, trainingPlanName: newPlanName }),
+                body: JSON.stringify({ userid:userId, name: newPlanName }),
             });
 
             if (response.ok) {
@@ -152,11 +153,11 @@ const TrainingPlanViewScreen = ({ route, navigation }) => {
 
             <FlatList
                 data={trainingPlans}
-                keyExtractor={(item) => item.trainingPlanId.toString()}
+                keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.item}>
                         <TouchableOpacity onPress={() => handleTrainingPlanPress(item)} style={styles.itemContent}>
-                            <Text style={styles.itemText}>{item.trainingPlanName}</Text>
+                            <Text style={styles.itemText}>{item.name}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => deleteTrainingPlan(item.trainingPlanId)}>
                             <Text style={styles.deleteButton}>Delete</Text>

@@ -70,7 +70,7 @@ const ExerciseItem = ({ item, userId, trainingPlanId, startedTrainingId}) => {
         <>
           <TextInput
             style={styles.input}
-            placeholder="kg( either use your bodyweight(if assisted, bodyweight - assistance weight) or maschine weight"
+            placeholder="kg( either use your bodyweight(if assisted, bodyweight - assistance weight) or machine weight"
             keyboardType="numeric"
             value={weight}
             onChangeText={setWeight}

@@ -4,7 +4,7 @@ import { backendUrl } from '../constants';
 import { StyleSheet } from 'react-native';
 import 'react-native-gesture-handler'; // Add this import
 const TrainingPlanScreen = ({ route, navigation }) => {
-  const { userId, trainingPlanId, trainingPlanName } = route.params;
+  const { userId, trainingplanid, traininplanname } = route.params;
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,8 +18,9 @@ const TrainingPlanScreen = ({ route, navigation }) => {
   const fetchExercises = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${backendUrl}/api/UserExcercise/${userId}/${trainingPlanId}`);
+      const response = await fetch(`${backendUrl}/api/excercise/${userId}/${trainingplanid}`);
       if (response.ok) {
+        console.log(response);
         const data = await response.json();
         setExercises(data);
       } else {
@@ -28,6 +29,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
       }
     } catch (error) {
       setError('Error fetching exercises: ' + error.message);
+      console.log(error)
     } finally {
       setLoading(false);
     }
@@ -35,7 +37,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     fetchExercises();
-  }, [userId, trainingPlanId]);
+  }, [userId, trainingplanid]);
 
   const handleAddExercise = async () => {
     if (!newExerciseName.trim() || !newExerciseSets.trim()) {
@@ -44,20 +46,24 @@ const TrainingPlanScreen = ({ route, navigation }) => {
     }
 
     try {
-      const response = await fetch(`${backendUrl}/api/UserExcercise`, {
+      console.log("trainingplanId " + trainingplanid)
+      console.log("userId: "+ userId)
+      const response = await fetch(`${backendUrl}/api/excercise`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId,
-          trainingPlanId,
-          excercisename: newExerciseName,
-          excercisesets: newExerciseSets,
+          userid: userId,
+          trainingplanid: parseInt(trainingplanid),
+          name: newExerciseName,
+          sets: parseInt(newExerciseSets),
         }),
       });
 
       if (response.ok) {
+        const data = await response.json();
+      console.log(data);
         await fetchExercises();
         setNewExerciseName('');
         setNewExerciseSets('');
@@ -84,7 +90,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
           text: 'Delete',
           onPress: async () => {
             try {
-              const response = await fetch(`${backendUrl}/api/UserExcercise/${userId}/${exerciseId}/${trainingPlanId}`, {
+              const response = await fetch(`${backendUrl}/api/UserExcercise/${userId}/${trainingplanid}`, {
                 method: 'DELETE',
               });
 
@@ -112,7 +118,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          trainingPlanId: trainingPlanId,
+          trainingplanid: trainingplanid,
           userId: userId,
         }),
       });
@@ -126,7 +132,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
 
       navigation.navigate('WorkoutScreen', {
         userId: userId,
-        trainingPlanId: trainingPlanId,
+        trainingplanid: trainingplanid,
         startedTrainingId: startedTrainingId,
       });
     } catch (error) {
@@ -135,7 +141,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
   };
 
   const navigateToPastWorkoutScreen = () => {
-    navigation.navigate('PastWorkoutScreen', { userId, trainingPlanId });
+    navigation.navigate('PastWorkoutScreen', { userId, trainingplanid });
   };
 
 
@@ -147,11 +153,11 @@ const TrainingPlanScreen = ({ route, navigation }) => {
         excerciseid: item.excerciseid,
         excercisename: item.excercisename
       })}>
-      <Text style={styles.exerciseName}>{item.excercisename} x {item.excercisesets}</Text>
+      <Text style={styles.exerciseName}>{item.name} x {item.sets}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => handleDeleteExercise(item.excerciseid)}
+        onPress={() => handleDeleteExercise(item.id)}
       >
         <Text style={styles.deleteButtonText}>Delete</Text>
       </TouchableOpacity>
@@ -173,7 +179,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
       keyboardVerticalOffset={Platform.select({ ios: 0, android: 0 })}
     >
       <View style={styles.headerContainer}>
-        <Text style={styles.header}>{trainingPlanName}</Text>
+        <Text style={styles.header}>{traininplanname}</Text>
         <TouchableOpacity style={styles.pastWorkoutButton} onPress={navigateToPastWorkoutScreen}>
           <Text style={styles.pastWorkoutButtonText}>View Past Workouts</Text>
         </TouchableOpacity>
@@ -185,7 +191,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
       ) : (
         <FlatList
           data={exercises}
-          keyExtractor={(item) => item.excerciseid.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
           keyboardShouldPersistTaps="handled"
         />
