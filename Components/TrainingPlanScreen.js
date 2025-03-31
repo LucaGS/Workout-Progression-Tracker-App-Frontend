@@ -20,7 +20,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
     try {
       const response = await fetch(`${backendUrl}/api/excercise/${userId}/${trainingplanid}`);
       if (response.ok) {
-        console.log(response);
+       
         const data = await response.json();
         setExercises(data);
       } else {
