@@ -112,14 +112,14 @@ const TrainingPlanScreen = ({ route, navigation }) => {
 
   const navigateToWorkoutScreen = async () => {
     try {
-      const response = await fetch(`${backendUrl}/api/UserWorkout/AddStartedTraining`, {
+      const response = await fetch(`${backendUrl}/api/startedtraining/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           trainingplanid: trainingplanid,
-          userId: userId,
+          userid: userId,
         }),
       });
 
@@ -128,7 +128,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
       }
 
       const data = await response.json();
-      const startedTrainingId = data.startedTrainingId;
+      const startedTrainingId = data.id;
 
       navigation.navigate('WorkoutScreen', {
         userId: userId,
@@ -235,7 +235,7 @@ const TrainingPlanScreen = ({ route, navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
+1
 // Define your styles here
 const styles = StyleSheet.create({
   container: {

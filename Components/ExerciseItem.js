@@ -1,29 +1,30 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { NgrokBackendUrlTunnel } from '../constants'; // Ensure you have Ngrok URL configured
+import { backendUrl } from '../constants'; // Ensure you have Ngrok URL configured
 import { Checkbox } from 'react-native-paper';
 import 'react-native-gesture-handler'; // Add this import
-const ExerciseItem = ({ item, userId, trainingPlanId, startedTrainingId}) => {
+
+const ExerciseItem = ({ item, userid, excerciseid, trainingplanid,startedtrainingid}) => {
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');
   const [isInputActive, setIsInputActive] = useState(false); // To toggle input fields
   const [isChecked, setIsChecked] = useState(false); // To track if the checkbox is checked
-
+//'userid','trainingplanid', 'excerciseid', 'startedtrainingplanid', 'set', 'reps', 'weight'
   const handleSubmit = async () => {
     const payload = {
-      startedtrainingid: startedTrainingId,
-      userid: userId,
-      trainingplanid: trainingPlanId,
+      userid: userid,
+      trainingplanid: trainingplanid,
+      excerciseid: excerciseid,
+      startedtrainingplanid: startedtrainingid,
       set: item.setNumber,
-      weight: parseFloat(weight) || 0,
       reps: parseInt(reps) || 0,
-      excerciseid: item.excerciseid
+      weight: weight ? parseFloat(weight) : 0, // Convert weight to float
     
     };
     console.log("ExcerciseID");
-    console.log(item.excerciseid);
+    console.log(payload);
     try {
-      const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserWorkout/AddStartedExcerciseSet`, {
+      const response = await fetch(`${backendUrl}/api/startedexcercise/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ const ExerciseItem = ({ item, userId, trainingPlanId, startedTrainingId}) => {
       <View style={styles.row}>
         <TouchableOpacity onPress={toggleInputFields} style={styles.exerciseButton}>
           <Text style={styles.exerciseName}>
-            {item.excercisename} (Set {item.setNumber})
+            {item.name} (Set {item.setNumber})
           </Text>
         </TouchableOpacity>
         <Checkbox

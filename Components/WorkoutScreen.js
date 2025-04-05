@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import LogoutButton from './LogoutButton';
 import ExerciseItem from './ExerciseItem';
-import { NgrokBackendUrlTunnel } from '../constants'; // Ensure you have Ngrok URL configured
+import { backendUrl} from '../constants'; // Ensure you have Ngrok URL configured
 import 'react-native-gesture-handler'; // Add this import
 const WorkoutScreen = ({ route }) => {
-  const { userId, trainingPlanId, startedTrainingId } = route.params;
+  const { userId, trainingplanid, startedTrainingId } = route.params;
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,7 +13,7 @@ const WorkoutScreen = ({ route }) => {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const response = await fetch(`${NgrokBackendUrlTunnel}/api/UserExcercise/${userId}/${trainingPlanId}`);
+         const response = await fetch(`${backendUrl}/api/excercise/${userId}/${trainingplanid}`);
         if (response.ok) {
           const data = await response.json();
           setExercises(createExerciseList(data));
@@ -29,12 +29,12 @@ const WorkoutScreen = ({ route }) => {
     };
 
     fetchExercises();
-  }, [userId, trainingPlanId]);
+  }, [userId, trainingplanid]);
 
   // Create an array of exercises based on the number of sets (max 10)
   const createExerciseList = (exercises) => {
     return exercises.flatMap((exercise) =>
-      Array.from({ length: Math.min(exercise.excercisesets, 10) }, (_, index) => ({
+      Array.from({ length: Math.min(exercise.sets, 10) }, (_, index) => ({
         ...exercise,
         setNumber: index + 1,
         weight: '',
@@ -61,18 +61,18 @@ const WorkoutScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Workout for Training Plan ID: {trainingPlanId}</Text>
+      <Text style={styles.header}>Workout for Training Plan ID: {trainingplanid}</Text>
       <Text>Your training ID for this workout is {startedTrainingId}</Text>
       <FlatList
         data={exercises}
-        keyExtractor={(item) => `${item.excerciseid}-${item.setNumber}`}
+        keyExtractor={(item) => `${item.id}-${item.setNumber}`}
         renderItem={({ item }) => (
           <ExerciseItem 
             item={item} 
-            userId={userId} 
-            trainingPlanId={trainingPlanId} 
-            startedTrainingId={startedTrainingId} 
-            excerciseid={exercises.excerciseid}
+            userid={userId}
+            excerciseid={item.id} 
+            trainingplanid={trainingplanid} 
+            startedtrainingid={startedTrainingId} 
           />
         )}
       />
