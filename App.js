@@ -1,85 +1,61 @@
+import 'react-native-get-random-values';
 import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './Components/LoginScreen';
-import SignupScreen from './Components/SignupScreen';
-import WelcomeScreen from './Components/WelcomeScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { View, Text } from 'react-native';
-import TrainingPlanScreen from './Components/TrainingPlanScreen';
-import TrainingPlanViewScreen from './Components/TrainingPlanViewScreen';
-import WorkoutScreen from './Components/WorkoutScreen';
-import PastWorkoutScreen from './Components/PastWorkoutScreen'; // Import the PastWorkoutScreen
-import PastExcercisesScreen from './Components/PastExcerciseScreen';
-import 'react-native-gesture-handler'; // Add this import
+import 'react-native-gesture-handler';
+import LoginScreen from './src/ui/screens/LoginScreen';
+import SignupScreen from './src/ui/screens/SignupScreen';
+import WelcomeScreen from './src/ui/screens/WelcomeScreen';
+import TrainingPlanScreen from './src/ui/screens/TrainingPlanScreen';
+import TrainingPlanViewScreen from './src/ui/screens/TrainingPlanViewScreen';
+import WorkoutScreen from './src/ui/screens/WorkoutScreen';
+import PastWorkoutScreen from './src/ui/screens/PastWorkoutScreen';
+import PastExcercisesScreen from './src/ui/screens/PastExcerciseScreen';
+import SettingsScreen from './src/ui/screens/SettingsScreen';
+import { getOrCreateLocalUser } from './src/repositories/usersRepository';
+import { getDb } from './src/infrastructure/db/connection';
 
 const App = () => {
   const Stack = createStackNavigator();
   const [initialRoute, setInitialRoute] = useState('Welcome');
   const [loading, setLoading] = useState(true);
-  const [GlobalUserId, setGlobalUserId] = useState(null);
 
   useEffect(() => {
-    const checkUser = async () => {
-      const userId = await AsyncStorage.getItem('userId');
-      if (userId) {
-        setGlobalUserId(userId);
-        setInitialRoute('TrainingPlanViewScreen');
-      }
-      setLoading(false); 
+    const initialize = async () => {
+      await getDb();
+      await getOrCreateLocalUser();
+      setInitialRoute('TrainingPlanViewScreen');
+      setLoading(false);
     };
 
-    checkUser();
+    initialize();
   }, []);
 
   if (loading) {
-    return <View><Text>Loading...</Text></View>;
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
   }
 
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen 
-          name="Welcome" 
-          component={WelcomeScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="Login" 
-          component={LoginScreen} 
-          options={{ title: 'Login' }} 
-        />
-        <Stack.Screen 
-          name="Signup" 
-          component={SignupScreen} 
-          options={{ title: 'Signup' }} 
-        />
-        <Stack.Screen 
-          name="TrainingPlanScreen" 
-          component={TrainingPlanScreen} 
-          options={{ title: 'Training Plan' }} 
-        />
-        <Stack.Screen 
-          name="TrainingPlanViewScreen" 
-          component={TrainingPlanViewScreen} 
-          options={{ title: 'Your Training Plans' }} 
-          initialParams={{ GlobalUserId }} 
-        />
-        <Stack.Screen 
-          name="WorkoutScreen" 
-          component={WorkoutScreen} 
-          options={{ title: 'Workout' }} 
-        />
-        <Stack.Screen 
-          name="PastWorkoutScreen" 
-          component={PastWorkoutScreen} // Add the PastWorkoutScreen
-          options={{ title: 'Past Workouts' }} // Set header title for PastWorkoutScreen
-        />
+        <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+        <Stack.Screen name="Signup" component={SignupScreen} options={{ title: 'Signup' }} />
+        <Stack.Screen name="TrainingPlanScreen" component={TrainingPlanScreen} options={{ title: 'Training Plan' }} />
         <Stack.Screen
-        name='PastExcercisesScreen'
-        component={PastExcercisesScreen}>
-        
-        </Stack.Screen>
+          name="TrainingPlanViewScreen"
+          component={TrainingPlanViewScreen}
+          options={{ title: 'Your Training Plans' }}
+        />
+        <Stack.Screen name="WorkoutScreen" component={WorkoutScreen} options={{ title: 'Workout' }} />
+        <Stack.Screen name="PastWorkoutScreen" component={PastWorkoutScreen} options={{ title: 'Past Workouts' }} />
+        <Stack.Screen name="PastExcercisesScreen" component={PastExcercisesScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} options={{ title: 'Einstellungen' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
